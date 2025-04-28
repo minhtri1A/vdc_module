@@ -6,17 +6,25 @@ authors = [
     {name = "Your Name",email = "you@example.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9,<3.12"
 dependencies = [
     "vinorm (>=2.0.7,<3.0.0)",
     "unidecode (>=1.4.0,<2.0.0)",
     "underthesea (>=6.8.4,<7.0.0)",
-    "huggingface-hub (>=0.30.2,<0.31.0)"
+    "huggingface-hub (>=0.30.2,<0.31.0)",
+    "torch (==2.2.2)",
+    "torchaudio (==2.2.2)",
+    "tts @ file:///Users/minhtri-ntl/Desktop/projects/vixtss_api/TTS",
 ]
 
 [tool.poetry]
-packages = [{include = "vixtss_api", from = "src"}]
+packages = [{include = "src", from = "."}]
 
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

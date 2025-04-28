@@ -11,9 +11,6 @@ import string
 from unidecode import unidecode
 from datetime import datetime
 
-LANG = "vi"
-
-
 XTTS_MODEL = None
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(SCRIPT_DIR, "model")
@@ -32,7 +29,7 @@ def clear_gpu_cache():
         torch.cuda.empty_cache()
 
 
-def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=False):
+def load_model(checkpoint_dir="src/model/", repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -40,7 +37,7 @@ def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=
     required_files = ["model.pth", "config.json", "vocab.json", "speakers_xtts.pth"]
     files_in_dir = os.listdir(checkpoint_dir)
     if not all(file in files_in_dir for file in required_files):
-        print("📥 Đang tải model viXTTS từ Hugging Face...")
+        print("******>Đang tải model viXTTS từ Hugging Face...")
         snapshot_download(
             repo_id=repo_id,
             repo_type="model",
@@ -51,13 +48,13 @@ def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=
             filename="speakers_xtts.pth",
             local_dir=checkpoint_dir,
         )
-        print("✅ Tải xong!")
+        print("******>Tải xong!")
 
     xtts_config = os.path.join(checkpoint_dir, "config.json")
     config = XttsConfig()
     config.load_json(xtts_config)
     XTTS_MODEL = Xtts.init_from_config(config)
-    print("🚀 Đang khởi tạo model...")
+    print("******>Đang khởi tạo model...")
     XTTS_MODEL.load_checkpoint(
         config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed
     )
@@ -65,14 +62,14 @@ def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=
     if torch.cuda.is_available():
         XTTS_MODEL.cuda()
 
-    print("✅ Model đã sẵn sàng!")
+    print("******>Model đã sẵn sàng!")
 
 # lang: language
 # tts_text: text to speech, 
 # speaker_audio_file: sample voice 
 # use_deepfilter:
 # normalize_text:
-def generate_voice(lang, tts_text, speaker_audio_file, use_deepfilter, normalize_text):
+def generate_voice(lang:str, tts_text:str, speaker_audio_file:str, use_deepfilter:bool, normalize_text:bool):
     global filter_cache, conditioning_latents_cache, cache_queue
     
     if XTTS_MODEL is None:
@@ -89,10 +86,10 @@ def generate_voice(lang, tts_text, speaker_audio_file, use_deepfilter, normalize
     
     # check set cache for file
     if use_deepfilter and speaker_audio_key in filter_cache:
-        print("Using filter cache...")
+        print("******>Using filter cache...")
         speaker_audio_file = filter_cache[speaker_audio_key]
     elif use_deepfilter:
-        print("Running filter...")
+        print("******>Running filter...")
         subprocess.run(
             [
                 "deepFilter",
@@ -115,10 +112,10 @@ def generate_voice(lang, tts_text, speaker_audio_file, use_deepfilter, normalize
     )
 
     if cache_key in conditioning_latents_cache:
-        print("Using conditioning latents cache...")
+        print("******>Using conditioning latents cache...")
         gpt_cond_latent, speaker_embedding = conditioning_latents_cache[cache_key]
     else:
-        print("Computing conditioning latents...")
+        print("******>Computing conditioning latents...")
         gpt_cond_latent, speaker_embedding = XTTS_MODEL.get_conditioning_latents(
             audio_path=speaker_audio_file,
             gpt_cond_len=XTTS_MODEL.config.gpt_cond_len,
@@ -170,7 +167,7 @@ def generate_voice(lang, tts_text, speaker_audio_file, use_deepfilter, normalize
 
     torchaudio.save(out_path, out_wav, 24000)
 
-    print("Saving output to ", out_path)
+    print("******>Saving output to ", out_path)
 
 #helper
 def normalize_vietnamese_text(text):
@@ -229,107 +226,11 @@ def get_file_name(text, max_char=50):
     filename = f"{current_datetime}_{filename}"
     return filename
 
-    # Tải model về nếu chưa có
-    model_dir = "model"
-    if not os.path.exists(model_dir):
-        print("📥 Đang tải model viXTTS từ Hugging Face...")
-        snapshot_download(
-            repo_id="capleaf/viXTTS",
-            repo_type="model",
-            local_dir=model_dir,
-        )
-        hf_hub_download(
-            repo_id="coqui/XTTS-v2",
-            filename="speakers_xtts.pth",
-            local_dir=model_dir,
-        )
-        print("✅ Tải xong!")
-
-    # Load config
-    config = XttsConfig()
-    config.load_json(os.path.join(model_dir, "config.json"))
-
-    config.supported_languages = config.languages
-
-    # Load model
-    print("🚀 Đang khởi tạo model...")
-    model = Xtts.init_from_config(config)
-    model.load_checkpoint(config, checkpoint_dir=model_dir)
-    model.eval()
-    if torch.cuda.is_available():
-        model.cuda()
-    print("✅ Model đã sẵn sàng!")
-
-    # Load voice sample
-    sample_path = os.path.join(model_dir, "diep-chi.wav")
-    print("🔊 Lấy giọng mẫu từ:", sample_path)
-
-    gpt_cond_latent, speaker_embedding = model.get_conditioning_latents(
-        audio_path=sample_path,
-        gpt_cond_len=config.gpt_cond_len,
-        max_ref_length=config.max_ref_len,
-        sound_norm_refs=config.sound_norm_refs,
-    )
-
-    # Văn bản cần đọc
-    tts_text = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
-    print("📄 Văn bản:", tts_text)
-
-    #
-
-    if LANG == "vi":
-        tts_text = normalize_vietnamese_text(tts_text)
-        print("📄 Văn bản2222:")
-
-    if LANG in ["ja", "zh-cn"]:
-        sentences = tts_text.split("。")
-    else:
-        sentences = sent_tokenize(tts_text)
-        print("📄 Văn bản3333: ", sentences)
-
-    wav_chunks = []
-    for sentence in sentences:
-        if sentence.strip() == "":
-            continue
-        wav_chunk = model.inference(
-            text=sentence,
-            language=LANG,
-            gpt_cond_latent=gpt_cond_latent,
-            speaker_embedding=speaker_embedding,
-            # The following values are carefully chosen for viXTTS
-            temperature=0.3,
-            length_penalty=1.0,
-            repetition_penalty=10.0,
-            top_k=30,
-            top_p=0.85,
-            enable_text_splitting=True,
-        )
-
-        keep_len = calculate_keep_len(sentence, LANG)
-        wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
-        wav_chunks.append(torch.tensor(wav_chunk["wav"]))
-
-        out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
-
-    # print("🎤 Đang sinh giọng nói...")
-    # out_wav = model.inference(
-    #     text=sentences,
-    #     language=LANG,
-    #     gpt_cond_latent=gpt_cond_latent,
-    #     speaker_embedding=speaker_embedding,
-    #     temperature=0.3,
-    #     length_penalty=1.0,
-    #     repetition_penalty=10.0,
-    #     top_k=30,
-    #     top_p=0.85,
-    # )
-
-    # Lưu file
-    output_path = "tts_test_dc.wav"
-    torchaudio.save(output_path, out_wav, 24000)
-    print(f"✅ File âm thanh đã lưu tại: {output_path}")
-
-textdemo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
+lang_demo = "vi"
+text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
+speaker_demo = f"{MODEL_DIR}/vi_sample.wav"
 
 if __name__ == "__main__":
-    main()
+    print("******>speaker demo ", speaker_demo)
+    load_model()
+    generate_voice(lang_demo, text_demo, speaker_demo, False, True)
