@@ -168,6 +168,18 @@ files = [
 ]
 
 [[package]]
+name = "appdirs"
+version = "1.4.4"
+description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
+    {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
+]
+
+[[package]]
 name = "async-timeout"
 version = "5.0.1"
 description = "Timeout context manager for asyncio programs"
@@ -914,6 +926,67 @@ files = [
     {file = "decorator-5.2.1-py3-none-any.whl", hash = "sha256:d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a"},
     {file = "decorator-5.2.1.tar.gz", hash = "sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360"},
 ]
+
+[[package]]
+name = "deepfilterlib"
+version = "0.5.6"
+description = ""
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "DeepFilterLib-0.5.6-cp310-cp310-macosx_10_7_x86_64.whl", hash = "sha256:5289e5cc55fc353e04a98992dd814a7ccce10d6db89d6cac1ba691b360d92c1b"},
+    {file = "DeepFilterLib-0.5.6-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:088b486768131fe89b5a2f179dbc15632f090ee5794d45be41bf3425223b3a26"},
+    {file = "DeepFilterLib-0.5.6-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:5f485fa39c0c6ccd6533e631034440e825a4f9243a3f2ae42c1495a3b775ede4"},
+    {file = "DeepFilterLib-0.5.6-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:b43ef9ea6b01289421255cb9e4e35e4e9ffe07646164b4614e0e3147c7733421"},
+    {file = "DeepFilterLib-0.5.6-cp310-none-win_amd64.whl", hash = "sha256:a0a01f9ae0c7e265002743659f4c7bbd5194dfed6de301536acee011d4308c35"},
+    {file = "DeepFilterLib-0.5.6-cp311-cp311-macosx_10_7_x86_64.whl", hash = "sha256:b92ccbffa5b8bbd2bae47eef288bc3504f86a65e57cf7ae271ebdf0f137e728a"},
+    {file = "DeepFilterLib-0.5.6-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d27f5d2c4f41d49b52e8f6a7bf62521d3d78d2cf513e75e062f60ef799d94834"},
+    {file = "DeepFilterLib-0.5.6-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:87b58093ab6e8379306e6ae330374856ee62e1cf7893cfbfb094177db478a850"},
+    {file = "DeepFilterLib-0.5.6-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:3ea0dffa9b0f0fae4aaebac4a3d13f9b2ba5becd805db1b14d2252163f07e787"},
+    {file = "DeepFilterLib-0.5.6-cp311-none-win_amd64.whl", hash = "sha256:e53fa759448dbee8ad7ad10d3313bbd8ca80e6989542f6971b95693de500cebf"},
+    {file = "DeepFilterLib-0.5.6-cp38-cp38-macosx_10_7_x86_64.whl", hash = "sha256:2e2508f6dae52d081d3cab11e84f433880774be5c9d8570d6407b0e3c2cb9c84"},
+    {file = "DeepFilterLib-0.5.6-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:fb50ea5d3a0fc202debaa3c63afef6f031c7d510b03bce6e243481f47ccbbb87"},
+    {file = "DeepFilterLib-0.5.6-cp38-cp38-manylinux_2_28_aarch64.whl", hash = "sha256:e7561ffec4c5b1f586cb0549a4b5887dc7d7f2fe828df60e90f13f939e8f8460"},
+    {file = "DeepFilterLib-0.5.6-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:20237475a6aa53fa086c2274525574c9eeb8c9d67e1b10a1ec933d4abaf3d6fd"},
+    {file = "DeepFilterLib-0.5.6-cp38-none-win_amd64.whl", hash = "sha256:b3c1a179e8c2056d270f1c335c93216c3e08905af1e99b4284d0006c1b31b5eb"},
+    {file = "DeepFilterLib-0.5.6-cp39-cp39-macosx_10_7_x86_64.whl", hash = "sha256:a11b515fe46a4d559cae87c8904b39efb01caf1c18cac71cb7caca589f2aa1a4"},
+    {file = "DeepFilterLib-0.5.6-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:f4e0a8eafa48afce1daa460d97578873c7500b90918cede8a821d84328551919"},
+    {file = "DeepFilterLib-0.5.6-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:fd6b605fdc5d611f9db5171ead43e3bd1e0aa311402768a1c09e2ce3a3beb6bc"},
+    {file = "DeepFilterLib-0.5.6-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:33c42561fafb5deb4946d4f79805f8097a123fe84dccad80a375466770c2bff8"},
+    {file = "DeepFilterLib-0.5.6-cp39-none-win_amd64.whl", hash = "sha256:cffa2a9961bda2d12a966256845cc2f566e9aae4bb02768753bf1728aecc4383"},
+    {file = "DeepFilterLib-0.5.6.tar.gz", hash = "sha256:38fa2334c5b19385ca1f747ca9636f8016119005b3a12046d56ddc054a3807e5"},
+]
+
+[package.dependencies]
+numpy = ">=1.22"
+
+[[package]]
+name = "deepfilternet"
+version = "0.5.6"
+description = "Noise supression using deep filtering"
+optional = false
+python-versions = ">=3.8,<4.0"
+groups = ["main"]
+files = [
+    {file = "deepfilternet-0.5.6-py3-none-any.whl", hash = "sha256:99f5688d954fcfa8f853bf8bb8c3b2a59e4f9dc5d95643c9e6a32053234ba7c6"},
+    {file = "deepfilternet-0.5.6.tar.gz", hash = "sha256:2e64f58cf6b346cf64bd9bd83fcc97452604aa398adf161d23bcbadc5fd6d16c"},
+]
+
+[package.dependencies]
+appdirs = ">=1.4,<2.0"
+deepfilterlib = "0.5.6"
+loguru = ">=0.5"
+numpy = ">=1.22,<2.0"
+packaging = ">=23.0,<24.0"
+requests = ">=2.27,<3.0"
+sympy = ">=1.6"
+
+[package.extras]
+dnsmos-local = ["onnxruntime (>=1.15,<2.0)"]
+eval = ["pesq (>=0.0.3,<0.0.5)", "pystoi (>=0.3,<0.4)", "scipy (>=1,<2)"]
+soundfile = ["soundfile (>=0.10,<0.13)"]
+train = ["deepfilterdataloader (==0.5.6)", "icecream (>=2,<3)"]
 
 [[package]]
 name = "docopt"
@@ -2027,6 +2100,25 @@ files = [
 ]
 
 [[package]]
+name = "loguru"
+version = "0.7.3"
+description = "Python logging made (stupidly) simple"
+optional = false
+python-versions = "<4.0,>=3.5"
+groups = ["main"]
+files = [
+    {file = "loguru-0.7.3-py3-none-any.whl", hash = "sha256:31a33c10c8e1e10422bfd431aeb5d351c7cf7fa671e3c4df004162264b28220c"},
+    {file = "loguru-0.7.3.tar.gz", hash = "sha256:19480589e77d47b8d85b2c827ad95d49bf31b0dcde16593892eb51dd18706eb6"},
+]
+
+[package.dependencies]
+colorama = {version = ">=0.3.4", markers = "sys_platform == \"win32\""}
+win32-setctime = {version = ">=1.0.0", markers = "sys_platform == \"win32\""}
+
+[package.extras]
+dev = ["Sphinx (==8.1.3) ; python_version >= \"3.11\"", "build (==1.2.2) ; python_version >= \"3.11\"", "colorama (==0.4.5) ; python_version < \"3.8\"", "colorama (==0.4.6) ; python_version >= \"3.8\"", "exceptiongroup (==1.1.3) ; python_version >= \"3.7\" and python_version < \"3.11\"", "freezegun (==1.1.0) ; python_version < \"3.8\"", "freezegun (==1.5.0) ; python_version >= \"3.8\"", "mypy (==v0.910) ; python_version < \"3.6\"", "mypy (==v0.971) ; python_version == \"3.6\"", "mypy (==v1.13.0) ; python_version >= \"3.8\"", "mypy (==v1.4.1) ; python_version == \"3.7\"", "myst-parser (==4.0.0) ; python_version >= \"3.11\"", "pre-commit (==4.0.1) ; python_version >= \"3.9\"", "pytest (==6.1.2) ; python_version < \"3.8\"", "pytest (==8.3.2) ; python_version >= \"3.8\"", "pytest-cov (==2.12.1) ; python_version < \"3.8\"", "pytest-cov (==5.0.0) ; python_version == \"3.8\"", "pytest-cov (==6.0.0) ; python_version >= \"3.9\"", "pytest-mypy-plugins (==1.9.3) ; python_version >= \"3.6\" and python_version < \"3.8\"", "pytest-mypy-plugins (==3.1.0) ; python_version >= \"3.8\"", "sphinx-rtd-theme (==3.0.2) ; python_version >= \"3.11\"", "tox (==3.27.1) ; python_version < \"3.8\"", "tox (==4.23.2) ; python_version >= \"3.8\"", "twine (==6.0.1) ; python_version >= \"3.11\""]
+
+[[package]]
 name = "marisa-trie"
 version = "1.2.1"
 description = "Static memory-efficient and fast Trie-like structures for Python."
@@ -3014,14 +3106,14 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "25.0"
+version = "23.2"
 description = "Core utilities for Python packages"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484"},
-    {file = "packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"},
+    {file = "packaging-23.2-py3-none-any.whl", hash = "sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7"},
+    {file = "packaging-23.2.tar.gz", hash = "sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5"},
 ]
 
 [[package]]
@@ -5230,6 +5322,22 @@ MarkupSafe = ">=2.1.1"
 watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
+name = "win32-setctime"
+version = "1.2.0"
+description = "A small Python utility to set file creation time on Windows"
+optional = false
+python-versions = ">=3.5"
+groups = ["main"]
+markers = "sys_platform == \"win32\""
+files = [
+    {file = "win32_setctime-1.2.0-py3-none-any.whl", hash = "sha256:95d644c4e708aba81dc3704a116d8cbc974d70b3bdb8be1d150e36be6e9d1390"},
+    {file = "win32_setctime-1.2.0.tar.gz", hash = "sha256:ae1fdf948f5640aae05c511ade119313fb6a30d7eabe25fef9764dca5873c4c0"},
+]
+
+[package.extras]
+dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
+
+[[package]]
 name = "wrapt"
 version = "1.17.2"
 description = "Module for decorators, wrappers and monkey patching."
@@ -5461,4 +5569,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.12"
-content-hash = "8ab0dbf1b297f738f7dfeee033973f2080e7dedb8ee381455a11bd2062e540fa"
+content-hash = "413a3941b062e608ac59d273561f67aa4901568250b969bcc89179d33df487fb"
