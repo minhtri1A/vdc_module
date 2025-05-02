@@ -1,0 +1,5 @@
+{
+    "python.analysis.autoImportCompletions": true,
+    "python.languageServer": "Pylance",
+    "python.formatting.blackArgs": ["--line-length", "120"]
+}

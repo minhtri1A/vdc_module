@@ -1,6 +1,5 @@
 import os
 import torch
-import torchaudio
 import subprocess
 from huggingface_hub import snapshot_download, hf_hub_download
 from TTS.tts.configs.xtts_config import XttsConfig
@@ -16,6 +15,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(SCRIPT_DIR, "model")
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, "output")
 FILTER_SUFFIX = "_DeepFilterNet3.wav"
+SPEAKER_PATH = f"{MODEL_DIR}/samples/vi_sample.wav"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Define dictionaries to store cached results
@@ -24,11 +24,11 @@ speaker_audio_cache = {}
 filter_cache = {}
 conditioning_latents_cache = {}
 
-#-----helper-----#
+
+# -----helper-----#
 def normalize_vietnamese_text(text):
     text = (
-       text
-        .replace("..", ".")
+        text.replace("..", ".")
         .replace("!.", "!")
         .replace("?.", "?")
         .replace(" .", ".")
@@ -40,6 +40,7 @@ def normalize_vietnamese_text(text):
         .replace("vuadungcu.com", "vua dụng cụ chấm cơm")
     )
     return text
+
 
 def calculate_keep_len(text, lang):
     """Simple hack for short sentences"""
@@ -55,6 +56,7 @@ def calculate_keep_len(text, lang):
         return 13000 * word_count + 2000 * num_punct
     return -1
 
+
 def invalidate_cache(cache_limit=50):
     """Invalidate the cache for the oldest key"""
     if len(cache_queue) > cache_limit:
@@ -69,6 +71,7 @@ def invalidate_cache(cache_limit=50):
         if key_to_remove in conditioning_latents_cache:
             del conditioning_latents_cache[key_to_remove]
 
+
 def get_file_name(text, max_char=50):
     filename = text[:max_char]
     filename = filename.lower()
@@ -81,12 +84,18 @@ def get_file_name(text, max_char=50):
     filename = f"{current_datetime}_{filename}"
     return filename
 
-#-----handle-----#
+
 def clear_gpu_cache():
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-def load_model(checkpoint_dir="src/model/", repo_id="capleaf/viXTTS", use_deepspeed=False):
+
+# -----handle-----#
+
+
+def load_model(
+    checkpoint_dir="src/model/", repo_id="capleaf/viXTTS", use_deepspeed=False
+):
     global XTTS_MODEL
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -121,26 +130,36 @@ def load_model(checkpoint_dir="src/model/", repo_id="capleaf/viXTTS", use_deepsp
 
     print("******>Model đã sẵn sàng!")
 
+
 # lang: language
-# tts_text: text to speech, 
-# speaker_audio_file: sample voice 
-# use_deepfilter:
-# normalize_text:
-def generate_voice(lang:str, tts_text:str, speaker_audio_file:str, use_deepfilter:bool, normalize_text:bool):
+# tts_text: text to speech,
+# speaker_audio_file: sample voice
+# use_deepfilter: loc am
+# normalize_text: chuan hoa tieng viet
+def generate_voice(
+    tts_text: str,
+    speaker_audio_file=f"{MODEL_DIR}/samples/vi_sample.wav",
+    use_deepfilter=True,
+    normalize_text=True,
+    lang="vi",
+):
     global filter_cache, conditioning_latents_cache, cache_queue
-    
+
+    # load model
+    load_model()
+
     if XTTS_MODEL is None:
         return "You need to run the previous step to load the model !!", None, None
-    
+
     if not speaker_audio_file:
         return "You need to provide reference audio!!!", None, None
-    
+
     # check set key cache for file
     speaker_audio_key = speaker_audio_file
     if not speaker_audio_key in cache_queue:
         cache_queue.append(speaker_audio_key)
         invalidate_cache()
-    
+
     # check set cache for file and deepfilter(loc tieng on am thanh)
     if use_deepfilter and speaker_audio_key in filter_cache:
         print("******>Using filter cache...")
@@ -159,8 +178,8 @@ def generate_voice(lang:str, tts_text:str, speaker_audio_file:str, use_deepfilte
             ".wav", FILTER_SUFFIX
         )
         speaker_audio_file = filter_cache[speaker_audio_key]
-    
-    #check set cache for Conditioning latents(lay dac trung cua giong noi)
+
+    # check set cache for Conditioning latents(lay dac trung cua giong noi)
     cache_key = (
         speaker_audio_key,
         XTTS_MODEL.config.gpt_cond_len,
@@ -174,10 +193,10 @@ def generate_voice(lang:str, tts_text:str, speaker_audio_file:str, use_deepfilte
     else:
         print("******>Computing conditioning latents...")
         gpt_cond_latent, speaker_embedding = XTTS_MODEL.get_conditioning_latents(
-            audio_path = speaker_audio_file,
-            gpt_cond_len = XTTS_MODEL.config.gpt_cond_len,
-            max_ref_length = XTTS_MODEL.config.max_ref_len,
-            sound_norm_refs = XTTS_MODEL.config.sound_norm_refs,
+            audio_path=speaker_audio_file,
+            gpt_cond_len=XTTS_MODEL.config.gpt_cond_len,
+            max_ref_length=XTTS_MODEL.config.max_ref_len,
+            sound_norm_refs=XTTS_MODEL.config.sound_norm_refs,
         )
         conditioning_latents_cache[cache_key] = (gpt_cond_latent, speaker_embedding)
 
@@ -210,29 +229,27 @@ def generate_voice(lang:str, tts_text:str, speaker_audio_file:str, use_deepfilte
             enable_text_splitting=True,
         )
         keep_len = calculate_keep_len(sentence, lang)
-       
+
         wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
 
-        #convert wav to tensor
+        # convert wav to tensor
         wav_chunks.append(torch.tensor(wav_chunk["wav"]))
-      
 
-    # save file
     out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
-    print("*****out_wav", out_wav)
-    gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
-    out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
 
-    torchaudio.save(out_path, out_wav, 24000)
+    # save file to local
+    # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
+    # out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
+    # torchaudio.save(out_path, out_wav, 24000)
 
-    print("******>Saving output to ", out_path)
+    return out_wav
 
 
-lang_demo = "vi"
-text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
-speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
+# lang_demo = "vi"
+# text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
+# speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
 
-if __name__ == "__main__":
-    print("******>speaker demo ", speaker_demo)
-    load_model()
-    generate_voice(lang_demo, text_demo, speaker_demo, True, True)
+# if __name__ == "__main__":
+#     print("******>speaker demo ", speaker_demo)
+#     load_model()
+#     generate_voice(lang_demo, text_demo, speaker_demo, True, True)
