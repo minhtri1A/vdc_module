@@ -12,10 +12,10 @@ from datetime import datetime
 
 XTTS_MODEL = None
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SPEAKER_DIR = os.path.join(SCRIPT_DIR, "speakers")
 MODEL_DIR = os.path.join(SCRIPT_DIR, "model")
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, "output")
 FILTER_SUFFIX = "_DeepFilterNet3.wav"
-SPEAKER_PATH = f"{MODEL_DIR}/samples/vi_sample.wav"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Define dictionaries to store cached results
@@ -132,7 +132,7 @@ def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed
 # normalize_text: chuan hoa tieng viet
 def generate_voice(
     tts_text: str,
-    speaker_audio_file=f"{MODEL_DIR}/samples/vi_sample.wav",
+    speaker_audio_file=f"{SPEAKER_DIR}/vi_sample.wav",
     use_deepfilter=True,
     normalize_text=True,
     lang="vi",
