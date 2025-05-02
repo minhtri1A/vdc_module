@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-name = "vdc-vixtss-module"
+name = "vdc_vixtss_module"
 version = "0.1.0"
 packages = [{include = "vdc_vixtss_module"}]
 
