@@ -76,9 +76,7 @@ def get_file_name(text, max_char=50):
     filename = text[:max_char]
     filename = filename.lower()
     filename = filename.replace(" ", "_")
-    filename = filename.translate(
-        str.maketrans("", "", string.punctuation.replace("_", ""))
-    )
+    filename = filename.translate(str.maketrans("", "", string.punctuation.replace("_", "")))
     filename = unidecode(filename)
     current_datetime = datetime.now().strftime("%m%d%H%M%S")
     filename = f"{current_datetime}_{filename}"
@@ -93,9 +91,7 @@ def clear_gpu_cache():
 # -----handle-----#
 
 
-def load_model(
-    checkpoint_dir="src/model/", repo_id="capleaf/viXTTS", use_deepspeed=False
-):
+def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -121,9 +117,7 @@ def load_model(
     config.load_json(xtts_config)
     XTTS_MODEL = Xtts.init_from_config(config)
     print("******>Đang khởi tạo model...")
-    XTTS_MODEL.load_checkpoint(
-        config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed
-    )
+    XTTS_MODEL.load_checkpoint(config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed)
     XTTS_MODEL.eval()
     if torch.cuda.is_available():
         XTTS_MODEL.cuda()
@@ -174,9 +168,7 @@ def generate_voice(
                 os.path.dirname(speaker_audio_file),
             ]
         )
-        filter_cache[speaker_audio_key] = speaker_audio_file.replace(
-            ".wav", FILTER_SUFFIX
-        )
+        filter_cache[speaker_audio_key] = speaker_audio_file.replace(".wav", FILTER_SUFFIX)
         speaker_audio_file = filter_cache[speaker_audio_key]
 
     # check set cache for Conditioning latents(lay dac trung cua giong noi)

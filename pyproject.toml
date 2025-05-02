@@ -14,11 +14,16 @@ dependencies = [
     "huggingface-hub (>=0.30.2,<0.31.0)",
     "torch (==2.2.2)",
     "torchaudio (==2.2.2)",
-    "tts @ ./TTS",
+    "tts @ file:///Users/minhtri-ntl/Desktop/projects/vixtss_api/TTS",
     "deepfilternet (>=0.5.6,<0.6.0)",
     "fastapi (>=0.115.12,<0.116.0)",
     "uvicorn (>=0.34.2,<0.35.0)",
 ]
+
+[tool.poetry]
+name = "vdc-vixtss-module"
+version = "0.1.0"
+packages = [{include = "vdc_vixtss_module"}]
 
 [tool.black]
 line-length = 120
