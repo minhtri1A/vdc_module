@@ -1,9 +1,9 @@
 [project]
-name = "vdc-vixtss-module"
+name = "vdc-module"
 version = "0.1.0"
 description = "Text to speech module"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Vua Dung Cu",email = "tranminhtri1521998@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.9,<3.12"
@@ -21,9 +21,9 @@ dependencies = [
 ]
 
 [tool.poetry]
-name = "vdc_vixtss_module"
+name = "vdc_module"
 version = "0.1.0"
-packages = [{include = "vdc_vixtss_module"}]
+packages = [{include = "vdc_module"}]
 
 [tool.black]
 line-length = 120
