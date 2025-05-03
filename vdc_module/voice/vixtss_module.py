@@ -28,7 +28,8 @@ conditioning_latents_cache = {}
 # -----helper-----#
 def normalize_vietnamese_text(text):
     text = (
-        text.replace("..", ".")
+        TTSnorm(text)
+        .replace("..", ".")
         .replace("!.", "!")
         .replace("?.", "?")
         .replace(" .", ".")
@@ -89,8 +90,6 @@ def clear_gpu_cache():
 
 
 # -----handle-----#
-
-
 def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
     clear_gpu_cache()
@@ -120,6 +119,7 @@ def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed
     XTTS_MODEL.load_checkpoint(config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed)
     XTTS_MODEL.eval()
     if torch.cuda.is_available():
+        print("******>Model use cuda!")
         XTTS_MODEL.cuda()
 
     print("******>Model đã sẵn sàng!")
@@ -140,10 +140,13 @@ def generate_voice(
     global filter_cache, conditioning_latents_cache, cache_queue
 
     # load model
-    load_model()
+    try:
+        load_model()
+    except Exception as e:
+        return f"Error loading model: {e}", None, None
 
     if XTTS_MODEL is None:
-        return "You need to run the previous step to load the model !!", None, None
+        return "Model could not be initialized.", None, None
 
     if not speaker_audio_file:
         return "You need to provide reference audio!!!", None, None
@@ -203,6 +206,7 @@ def generate_voice(
     else:
         sentences = sent_tokenize(tts_text)
 
+    print("******>Wav_chunks XTTS_MODEL.inference...")
     # create wav chunk from sentences
     wav_chunks = []
     for sentence in sentences:
@@ -226,7 +230,14 @@ def generate_voice(
         wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
 
         # convert wav to tensor
-        wav_chunks.append(torch.tensor(wav_chunk["wav"]))
+        try:
+            tensor_chunk = torch.tensor(wav_chunk["wav"])
+            wav_chunks.append(tensor_chunk)
+        except Exception as e:
+            print(f"Warning: Could not convert wav chunk to tensor: {e}")
+
+    if not wav_chunks:
+        return "No audio chunks were generated. Please check your input text.", None, None
 
     out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
 
@@ -234,6 +245,7 @@ def generate_voice(
     # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
     # out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
     # torchaudio.save(out_path, out_wav, 24000)
+    print("******>Finish!")
 
     return out_wav
 
