@@ -165,7 +165,8 @@ def generate_voice(
                 "deepFilter",
                 speaker_audio_file,
                 "-o",
-                os.path.dirname(speaker_audio_file),
+                # dir save deepFilter file
+                SPEAKER_DIR,
             ]
         )
         filter_cache[speaker_audio_key] = speaker_audio_file.replace(".wav", FILTER_SUFFIX)
