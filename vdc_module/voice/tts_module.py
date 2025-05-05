@@ -255,11 +255,11 @@ def generate_voice(
     return out_wav
 
 
-# lang_demo = "vi"
-# text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
-# speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
+lang_demo = "vi"
+text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
+speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
 
-# if __name__ == "__main__":
-#     print("******>speaker demo ", speaker_demo)
-#     load_model()
-#     generate_voice(lang_demo, text_demo, speaker_demo, True, True)
+if __name__ == "__main__":
+    print("******>speaker demo ", speaker_demo)
+    load_model()
+    generate_voice(lang_demo, text_demo, speaker_demo, True, True)
