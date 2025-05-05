@@ -28,6 +28,7 @@ conditioning_latents_cache = {}
 
 # -----helper-----#
 def normalize_vietnamese_text(text):
+    text = text.replace("vuadungcu.com", "vua dụng cụ chấm com")
     text = (
         TTSnorm(text, unknown=False, lower=False, rule=True)
         .replace("..", ".")
@@ -39,7 +40,6 @@ def normalize_vietnamese_text(text):
         .replace("'", "")
         .replace("AI", "Ây Ai")
         .replace("A.I", "Ây Ai")
-        .replace("vuadungcu.com", "vua dụng cụ chấm cơm")
     )
     return text
 
