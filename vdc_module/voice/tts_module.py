@@ -29,7 +29,7 @@ conditioning_latents_cache = {}
 # -----helper-----#
 def normalize_vietnamese_text(text):
     text = (
-        TTSnorm(text)
+        TTSnorm(text, unknown=False, lower=False, rule=True)
         .replace("..", ".")
         .replace("!.", "!")
         .replace("?.", "?")
