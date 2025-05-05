@@ -4,6 +4,7 @@ import subprocess
 from huggingface_hub import snapshot_download, hf_hub_download
 from TTS.tts.configs.xtts_config import XttsConfig
 from TTS.tts.models.xtts import Xtts
+import torchaudio
 from vinorm import TTSnorm
 from underthesea import sent_tokenize
 import string
@@ -247,9 +248,9 @@ def generate_voice(
     out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
 
     # save file to local
-    # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
-    # out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
-    # torchaudio.save(out_path, out_wav, 24000)
+    gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
+    out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
+    torchaudio.save(out_path, out_wav, 24000)
     print("******>Finish!")
 
     return out_wav
