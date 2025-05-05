@@ -257,7 +257,7 @@ def generate_voice(
 
 lang_demo = "vi"
 text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
-speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
+speaker_demo = f"{SPEAKER_DIR}/vi_sample.wav"
 
 if __name__ == "__main__":
     print("******>speaker demo ", speaker_demo)
