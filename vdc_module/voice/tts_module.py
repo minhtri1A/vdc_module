@@ -262,4 +262,4 @@ speaker_demo = f"{MODEL_DIR}/samples/nguyenngocngan_sample.wav"
 if __name__ == "__main__":
     print("******>speaker demo ", speaker_demo)
     load_model()
-    generate_voice(lang_demo, text_demo, speaker_demo, True, True)
+    generate_voice(text_demo, speaker_demo, True, True, lang_demo)
