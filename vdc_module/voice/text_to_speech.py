@@ -252,7 +252,7 @@ def generate_text_to_speech(
     # return out_wav
 
     # single wav
-    wav_chunk = XTTS_MODEL.inference(
+    wav = XTTS_MODEL.inference(
         text=tts_text,
         language=lang,
         gpt_cond_latent=gpt_cond_latent,
@@ -265,7 +265,7 @@ def generate_text_to_speech(
         top_p=0.85,
         enable_text_splitting=True,
     )
-    wav_chunks = torch.tensor(wav_chunk["wav"]).unsqueeze(0)
+    tensor_wav = torch.tensor(wav["wav"]).unsqueeze(0)
 
     # save file to local
     # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
@@ -273,7 +273,7 @@ def generate_text_to_speech(
     # torchaudio.save(out_path, out_wav, 24000)
     print("******>Finish!")
 
-    return wav_chunks
+    return tensor_wav
 
 
 lang_demo = "vi"
