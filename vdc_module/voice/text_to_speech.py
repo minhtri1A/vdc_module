@@ -201,9 +201,9 @@ def generate_text_to_speech(
         conditioning_latents_cache[cache_key] = (gpt_cond_latent, speaker_embedding)
 
     if torch.cuda.is_available():
-        print("******>Model use cuda 222!")
-        speaker_embedding = speaker_embedding.to("cuda")
-        gpt_cond_latent = gpt_cond_latent.to("cuda")
+        print("******>OFF*Model use cuda 222!")
+        # speaker_embedding = speaker_embedding.to("cuda")
+        # gpt_cond_latent = gpt_cond_latent.to("cuda")
 
     # normalize_text vietnamese(chuan hoa tieng viet lai) -> 12kg = 12 kilogram,...
     if normalize_text and lang == "vi":
