@@ -163,10 +163,10 @@ def generate_text_to_speech(
 
     # check set cache for file and deepfilter(loc tieng on am thanh)
     if use_deepfilter and speaker_audio_key in filter_cache:
-        print("******>Using filter cache...")
+        print("******>Using deepfilter cache...")
         speaker_audio_file = filter_cache[speaker_audio_key]
     elif use_deepfilter:
-        print("******>Running filter...")
+        print("******>Running deepfilter...")
         subprocess.run(
             [
                 "deepFilter",
@@ -201,9 +201,9 @@ def generate_text_to_speech(
         conditioning_latents_cache[cache_key] = (gpt_cond_latent, speaker_embedding)
 
     if torch.cuda.is_available():
-        print("******>OFF*Model use cuda 222!")
-        # speaker_embedding = speaker_embedding.to("cuda")
-        # gpt_cond_latent = gpt_cond_latent.to("cuda")
+        print("******>Model use cuda 222!")
+        speaker_embedding = speaker_embedding.to("cuda")
+        gpt_cond_latent = gpt_cond_latent.to("cuda")
 
     # normalize_text vietnamese(chuan hoa tieng viet lai) -> 12kg = 12 kilogram,...
     if normalize_text and lang == "vi":
@@ -215,7 +215,7 @@ def generate_text_to_speech(
     else:
         sentences = sent_tokenize(tts_text)
 
-    print("******>Wav_chunks XTTS_MODEL.inference...")
+    print("******>Wav_chunks XTTS_MODEL.inference...", len(sentences))
     # create wav chunk from sentences
     wav_chunks = []
     for sentence in sentences:
@@ -248,6 +248,7 @@ def generate_text_to_speech(
     if not wav_chunks:
         return "No audio chunks were generated. Please check your input text.", None, None
 
+    print("******>Torch.cat")
     out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
 
     # save file to local
