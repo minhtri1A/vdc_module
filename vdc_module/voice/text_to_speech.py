@@ -91,7 +91,7 @@ def clear_gpu_cache():
 
 
 # -----handle-----#
-def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
+def load_model_text_to_speech_vi(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
     print("******>Clear_gpu_cache...")
     clear_gpu_cache()
@@ -146,11 +146,11 @@ def generate_text_to_speech(
 
     # chi load model khi chua load
     if XTTS_MODEL is None:
-        try:
-            print("*****Start load model Coqui:")
-            load_model()
-        except Exception as e:
-            return f"Error loading model: {e}", None, None
+        return (
+            "You need to load the model before doing the next step!!! - call function load_model_text_to_speech_vi",
+            None,
+            None,
+        )
 
     if not speaker_audio_file:
         return "You need to provide reference audio!!!", None, None
@@ -269,7 +269,7 @@ speaker_demo = f"{SPEAKER_DIR}/vi_sample.wav"
 
 if __name__ == "__main__":
     print("******>speaker demo ", speaker_demo)
-    load_model()
+    load_model_text_to_speech_vi()
     generate_text_to_speech(text_demo, speaker_demo, True, True, lang_demo)
 
 
