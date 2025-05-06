@@ -216,40 +216,56 @@ def generate_text_to_speech(
         sentences = sent_tokenize(tts_text)
 
     print("******>Wav_chunks XTTS_MODEL.inference...222", len(sentences))
-    # create wav chunk from sentences
-    wav_chunks = []
-    for sentence in sentences:
-        if sentence.strip() == "":
-            continue
-        wav_chunk = XTTS_MODEL.inference(
-            text=sentence,
-            language=lang,
-            gpt_cond_latent=gpt_cond_latent,
-            speaker_embedding=speaker_embedding,
-            # The following values are carefully chosen for viXTTS
-            temperature=0.3,
-            length_penalty=1.0,
-            repetition_penalty=10.0,
-            top_k=30,
-            top_p=0.85,
-            enable_text_splitting=True,
-        )
-        keep_len = calculate_keep_len(sentence, lang)
+    # multiple create wav chunk from sentences
+    # wav_chunks = []
+    # for sentence in sentences:
+    #     if sentence.strip() == "":
+    #         continue
+    #     wav_chunk = XTTS_MODEL.inference(
+    #         text=sentence,
+    #         language=lang,
+    #         gpt_cond_latent=gpt_cond_latent,
+    #         speaker_embedding=speaker_embedding,
+    #         # The following values are carefully chosen for viXTTS
+    #         temperature=0.3,
+    #         length_penalty=1.0,
+    #         repetition_penalty=10.0,
+    #         top_k=30,
+    #         top_p=0.85,
+    #         enable_text_splitting=True,
+    #     )
+    #     keep_len = calculate_keep_len(sentence, lang)
 
-        wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
+    #     wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
 
-        # convert wav to tensor
-        try:
-            tensor_chunk = torch.tensor(wav_chunk["wav"])
-            wav_chunks.append(tensor_chunk)
-        except Exception as e:
-            print(f"Warning: Could not convert wav chunk to tensor: {e}")
+    #     # convert wav to tensor
+    #     try:
+    #         tensor_chunk = torch.tensor(wav_chunk["wav"])
+    #         wav_chunks.append(tensor_chunk)
+    #     except Exception as e:
+    #         print(f"Warning: Could not convert wav chunk to tensor: {e}")
 
-    if not wav_chunks:
-        return "No audio chunks were generated. Please check your input text.", None, None
+    # if not wav_chunks:
+    #     return "No audio chunks were generated. Please check your input text.", None, None
+    # print("******>Torch.cat")
+    # out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
+    # return out_wav
 
-    print("******>Torch.cat")
-    out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
+    # single wav
+    wav_chunk = XTTS_MODEL.inference(
+        text=tts_text,
+        language=lang,
+        gpt_cond_latent=gpt_cond_latent,
+        speaker_embedding=speaker_embedding,
+        # The following values are carefully chosen for viXTTS
+        temperature=0.3,
+        length_penalty=1.0,
+        repetition_penalty=10.0,
+        top_k=30,
+        top_p=0.85,
+        enable_text_splitting=True,
+    )
+    wav_chunks = torch.tensor(wav_chunk["wav"]).unsqueeze(0)
 
     # save file to local
     # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
@@ -257,7 +273,7 @@ def generate_text_to_speech(
     # torchaudio.save(out_path, out_wav, 24000)
     print("******>Finish!")
 
-    return out_wav
+    return wav_chunks
 
 
 lang_demo = "vi"
