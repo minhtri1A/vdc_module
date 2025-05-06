@@ -215,7 +215,7 @@ def generate_text_to_speech(
     else:
         sentences = sent_tokenize(tts_text)
 
-    print("******>Wav_chunks XTTS_MODEL.inference...", len(sentences))
+    print("******>Wav_chunks XTTS_MODEL.inference...222", len(sentences))
     # create wav chunk from sentences
     wav_chunks = []
     for sentence in sentences:
