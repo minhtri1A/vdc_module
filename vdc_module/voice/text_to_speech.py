@@ -91,8 +91,9 @@ def clear_gpu_cache():
 
 
 # -----handle-----#
-def load_model_text_to_speech_vi(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
+def load_model_text_to_speech_vi(repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
+    checkpoint_dir = MODEL_DIR
     print("******>Clear_gpu_cache...")
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
