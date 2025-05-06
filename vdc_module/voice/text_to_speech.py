@@ -93,10 +93,12 @@ def clear_gpu_cache():
 # -----handle-----#
 def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
+    print("******>Clear_gpu_cache...")
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
     required_files = ["model.pth", "config.json", "vocab.json", "speakers_xtts.pth"]
     files_in_dir = os.listdir(checkpoint_dir)
+    print("******>Check download model...")
     if not all(file in files_in_dir for file in required_files):
         print("******>Đang tải model viXTTS từ Hugging Face...")
         snapshot_download(
@@ -111,12 +113,15 @@ def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed
         )
         print("******>Tải xong!")
 
+    print("******>Define xtss config...")
     xtts_config = os.path.join(checkpoint_dir, "config.json")
     config = XttsConfig()
+    print("******>loading json and init_from_config config...")
     config.load_json(xtts_config)
     XTTS_MODEL = Xtts.init_from_config(config)
-    print("******>Đang khởi tạo model...")
+    print("******>Đang load_checkpoint model...")
     XTTS_MODEL.load_checkpoint(config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed)
+    print("******>Đang eval tạo model...")
     XTTS_MODEL.eval()
     if torch.cuda.is_available():
         print("******>Model use cuda!")
