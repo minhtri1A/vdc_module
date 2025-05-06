@@ -2,8 +2,9 @@ import whisper
 import os
 
 
-def generate_text(stt_audio: str, gpu=False):
-    model = whisper.load_model("medium")
+def generate_speech_to_text(stt_audio: str, gpu=False):
+    model = whisper.load_model("turbo")
+    print("*****Model device:", model.device)
     # # load audio and pad/trim it to fit 30 seconds
     # audio = whisper.load_audio(audio_file)
     # audio = whisper.pad_or_trim(audio)
@@ -32,4 +33,4 @@ SPEAKER_DIR = os.path.join(SCRIPT_DIR, "speakers")
 
 if __name__ == "__main__":
     file_path = os.path.join(SPEAKER_DIR, "vi_sample.wav")
-    generate_text(file_path)
+    generate_speech_to_text(file_path, True)

@@ -131,7 +131,7 @@ def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed
 # speaker_audio_file: sample voice
 # use_deepfilter: loc am
 # normalize_text: chuan hoa tieng viet
-def generate_voice(
+def generate_text_to_speech(
     tts_text: str,
     speaker_audio_file=f"{SPEAKER_DIR}/vi_sample.wav",
     use_deepfilter=True,
@@ -248,9 +248,9 @@ def generate_voice(
     out_wav = torch.cat(wav_chunks, dim=0).unsqueeze(0)
 
     # save file to local
-    gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
-    out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
-    torchaudio.save(out_path, out_wav, 24000)
+    # gr_audio_id = os.path.basename(os.path.dirname(speaker_audio_file))
+    # out_path = os.path.join(OUTPUT_DIR, f"{get_file_name(tts_text)}_{gr_audio_id}.wav")
+    # torchaudio.save(out_path, out_wav, 24000)
     print("******>Finish!")
 
     return out_wav
@@ -263,4 +263,4 @@ speaker_demo = f"{SPEAKER_DIR}/vi_sample.wav"
 if __name__ == "__main__":
     print("******>speaker demo ", speaker_demo)
     load_model()
-    generate_voice(text_demo, speaker_demo, True, True, lang_demo)
+    generate_text_to_speech(text_demo, speaker_demo, True, True, lang_demo)

@@ -1,2 +1,2 @@
-from .voice.tts_module import generate_voice
-from .voice.stt_module import generate_text
+from .voice.text_to_speech import generate_text_to_speech
+from .voice.speech_to_text import generate_text
