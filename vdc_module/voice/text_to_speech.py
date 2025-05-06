@@ -144,15 +144,13 @@ def generate_text_to_speech(
 ):
     global filter_cache, conditioning_latents_cache, cache_queue
 
-    # load model
-    try:
-        print("*****Start load model Coqui:")
-        load_model()
-    except Exception as e:
-        return f"Error loading model: {e}", None, None
-
+    # chi load model khi chua load
     if XTTS_MODEL is None:
-        return "Model could not be initialized.", None, None
+        try:
+            print("*****Start load model Coqui:")
+            load_model()
+        except Exception as e:
+            return f"Error loading model: {e}", None, None
 
     if not speaker_audio_file:
         return "You need to provide reference audio!!!", None, None
