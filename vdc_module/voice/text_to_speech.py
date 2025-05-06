@@ -95,7 +95,6 @@ def load_model(checkpoint_dir=MODEL_DIR, repo_id="capleaf/viXTTS", use_deepspeed
     global XTTS_MODEL
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
-
     required_files = ["model.pth", "config.json", "vocab.json", "speakers_xtts.pth"]
     files_in_dir = os.listdir(checkpoint_dir)
     if not all(file in files_in_dir for file in required_files):
@@ -142,6 +141,7 @@ def generate_text_to_speech(
 
     # load model
     try:
+        print("*****Start load model Coqui:")
         load_model()
     except Exception as e:
         return f"Error loading model: {e}", None, None

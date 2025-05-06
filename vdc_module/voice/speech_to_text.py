@@ -3,6 +3,7 @@ import os
 
 
 def generate_speech_to_text(stt_audio: str):
+    print("*****Start load model whisper:")
     model = whisper.load_model("turbo")
     print("*****Model device:", model.device)
     # # load audio and pad/trim it to fit 30 seconds
