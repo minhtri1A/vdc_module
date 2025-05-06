@@ -2,7 +2,7 @@ import whisper
 import os
 
 
-def generate_speech_to_text(stt_audio: str, gpu=False):
+def generate_speech_to_text(stt_audio: str):
     model = whisper.load_model("turbo")
     print("*****Model device:", model.device)
     # # load audio and pad/trim it to fit 30 seconds
@@ -22,7 +22,8 @@ def generate_speech_to_text(stt_audio: str, gpu=False):
 
     # # print the recognized text
     # print(result.text)
-    result = model.transcribe(stt_audio, language="vi", fp16=gpu)
+    fp16 = model.device == "cuda"
+    result = model.transcribe(stt_audio, language="vi", fp16=fp16)
     print(result["text"])
 
     return result["text"]
