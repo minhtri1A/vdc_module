@@ -4,12 +4,12 @@ import subprocess
 from huggingface_hub import snapshot_download, hf_hub_download
 from TTS.tts.configs.xtts_config import XttsConfig
 from TTS.tts.models.xtts import Xtts
-import torchaudio
 from vinorm import TTSnorm
 from underthesea import sent_tokenize
 import string
 from unidecode import unidecode
 from datetime import datetime
+import time
 
 XTTS_MODEL = None
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -147,14 +147,10 @@ def generate_text_to_speech(
 
     # chi load model khi chua load
     if XTTS_MODEL is None:
-        return (
-            "You need to load the model before doing the next step!!! - call function load_model_text_to_speech_vi",
-            None,
-            None,
-        )
+        return "You need to load the model before doing the next step!!! - call function load_model_text_to_speech_vi"
 
     if not speaker_audio_file:
-        return "You need to provide reference audio!!!", None, None
+        return "You need to provide reference audio!!!"
 
     # check set key cache for file
     speaker_audio_key = speaker_audio_file
@@ -225,6 +221,7 @@ def generate_text_to_speech(
     for sentence in sentences:
         if sentence.strip() == "":
             continue
+        start1 = time.time()
         wav_chunk = XTTS_MODEL.inference(
             text=sentence,
             language=lang,
@@ -238,17 +235,21 @@ def generate_text_to_speech(
             top_p=0.85,
             enable_text_splitting=True,
         )
-
-        # keep_len = calculate_keep_len(sentence, lang)
-        # wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
+        print("******>Inference", time.time() - start1)
+        start2 = time.time()
+        keep_len = calculate_keep_len(sentence, lang)
+        wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
         wav_chunk["wav"] = wav_chunk["wav"]
-
+        print("******>Calculate_keep_len", time.time() - start2)
+        start3 = time.time()
         # convert wav to tensor
         try:
             tensor_chunk = torch.tensor(wav_chunk["wav"])
             wav_chunks.append(tensor_chunk)
         except Exception as e:
             print(f"Warning: Could not convert wav chunk to tensor: {e}")
+
+        print("******>Convert wav to tensor", time.time() - start3)
 
     if not wav_chunks:
         return "No audio chunks were generated. Please check your input text.", None, None
@@ -266,13 +267,13 @@ def generate_text_to_speech(
 
 
 lang_demo = "vi"
-text_demo = "Xin chào, tôi là vua dụng cụ AI, được viết bởi vuadungcu.com, Bạn có thể hỏi tôi bất cứ thứ gì trên đời này, trả lời được hay không thì hên xui."
+text_demo = "Tôi vừa hoàn thành một project nhỏ sử dụng React để xây dựng giao diện người dùng. Trong quá trình làm việc, tôi đã học được cách tối ưu hiệu suất thông qua việc sử dụng memoization và code splitting. Nhờ đó, ứng dụng chạy mượt mà hơn và dễ bảo trì hơn. Tuy còn nhiều điều cần cải thiện, nhưng mình khá hài lòng với the current result. Bạn muốn đoạn văn theo chủ đề gì cụ thể không?"
 speaker_demo = f"{SPEAKER_DIR}/vi_sample.wav"
 
 if __name__ == "__main__":
     print("******>speaker demo ", speaker_demo)
     load_model_text_to_speech_vi()
-    generate_text_to_speech(text_demo, speaker_demo, True, True, lang_demo)
+    generate_text_to_speech(text_demo, speaker_demo, True, False, lang_demo)
 
 
 # single wav
