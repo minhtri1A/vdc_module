@@ -221,7 +221,6 @@ def generate_text_to_speech(
     for sentence in sentences:
         if sentence.strip() == "":
             continue
-        start1 = time.time()
         wav_chunk = XTTS_MODEL.inference(
             text=sentence,
             language=lang,
@@ -238,7 +237,6 @@ def generate_text_to_speech(
         # keep_len = calculate_keep_len(sentence, lang)
         # wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
         wav_chunk["wav"] = wav_chunk["wav"]
-        start3 = time.time()
         # convert wav to tensor
         try:
             tensor_chunk = torch.tensor(wav_chunk["wav"])
