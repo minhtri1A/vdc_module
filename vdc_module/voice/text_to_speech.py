@@ -207,13 +207,13 @@ def generate_text_to_speech(
         tts_text = normalize_vietnamese_text(tts_text)
 
     # Split text by sentence(chunk)
-    if lang in ["ja", "zh-cn"]:
-        sentences = tts_text.split("。")
-    else:
-        sentences = sent_tokenize(tts_text)
+    # if lang in ["ja", "zh-cn"]:
+    #     sentences = tts_text.split("。")
+    # else:
+    #     sentences = sent_tokenize(tts_text)
 
     # check single
-    # sentences = [tts_text]
+    sentences = [tts_text]
 
     print("******>Wav_chunks XTTS_MODEL.inference...222", len(sentences))
     # create wav chunk from sentences
