@@ -240,7 +240,7 @@ def generate_text_to_speech(
         # keep_len = calculate_keep_len(sentence, lang)
         # wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
         wav_chunk["wav"] = wav_chunk["wav"]
-        print("******>Calculate_keep_len", time.time() - start2)
+        # print("******>Calculate_keep_len", time.time() - start2)
         start3 = time.time()
         # convert wav to tensor
         try:
