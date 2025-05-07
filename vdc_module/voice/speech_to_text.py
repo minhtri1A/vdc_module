@@ -10,7 +10,7 @@ def load_model_speech_to_text(model="turbo"):
     start = time.time()
     print("*****Start loading model whisper:", model)
     WHISPER_MODEL = whisper.load_model(model)
-    print("*****Load model whisper success:", WHISPER_MODEL, "time", time.time() - start)
+    print("*****Load model whisper success:", model, "time", time.time() - start)
 
 
 def generate_speech_to_text(stt_audio: str):
