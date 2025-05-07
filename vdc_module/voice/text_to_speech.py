@@ -236,7 +236,7 @@ def generate_text_to_speech(
             enable_text_splitting=True,
         )
         print("******>Inference", time.time() - start1)
-        start2 = time.time()
+        # start2 = time.time()
         # keep_len = calculate_keep_len(sentence, lang)
         # wav_chunk["wav"] = wav_chunk["wav"][:keep_len]
         wav_chunk["wav"] = wav_chunk["wav"]
